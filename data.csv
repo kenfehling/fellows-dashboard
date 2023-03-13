@@ -1,10 +1,10 @@
 name,hometown,industry,years_in_hawaii
-,Asia:Japan,Sales,5
-,Asia:Japan,Marketing,4
-,Asia:Japan,IT,2
-,Asia:Japan,Finance,0
-,Asia:Japan,HR,1
-,Asia:Japan,Legal,5
+,Japan,Sales,5
+,Japan,Marketing,4
+,Japan,IT,2
+,Japan,Finance,0
+,Japan,HR,1
+,Japan,Legal,5
 ,Hawaii,Sales,5
 ,Hawaii,Marketing,3
 ,Hawaii,IT,4
@@ -16,4 +16,8 @@ name,hometown,industry,years_in_hawaii
 ,USA,IT,5
 ,USA,Finance,5
 ,USA,HR,5
-,Asia:Vietnam,Art,2
+,Vietnam,Art,2
+,South Korea,Real Estate,3
+,China,IT,5
+,China,Finance,5
+,Europe,Finance,5

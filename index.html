@@ -7,6 +7,7 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/crossfilter2/1.5.4/crossfilter.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/dc/4.2.7/dc.min.js"></script>
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/dc/4.2.7/style/dc.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -25,6 +26,23 @@
   </div>
 </div>
 <script>
+  const pieChartColors = d3.scaleOrdinal().range([
+    '#7fc97f',
+    '#74c2f6',
+    '#beaed4',
+    '#fdc086',
+    '#ffff99',
+    '#e093c1',
+  ]);
+  const barChartColors = d3.scaleOrdinal().range([
+    '#7fc97f',
+    '#74c2f6',
+    '#beaed4',
+    '#fdc086',
+    '#ffff99',
+    '#e093c1',
+  ]);
+
   d3.csv("data.csv").then(function(data) {
 
     // Convert strings to numbers where needed
@@ -33,40 +51,43 @@
     });
 
     // Create a crossfilter instance
-    var cf = crossfilter(data);
+    const cf = crossfilter(data);
 
     // Define dimensions
-    var dimHometown = cf.dimension(function(d) { return d.hometown; });
-    var dimIndustry = cf.dimension(function(d) { return d.industry; });
+    const dimHometown = cf.dimension(function(d) { return d.hometown; });
+    const dimIndustry = cf.dimension(function(d) { return d.industry; });
 
     // Define groups
-    var groupHometown = dimHometown.group();
-    var groupIndustry = dimIndustry.group();
+    const groupHometown = dimHometown.group();
+    const groupIndustry = dimIndustry.group();
 
     // Create the "Years in Hawaii" dimension and group
-    var yearsDimension = cf.dimension(function(d) { return d.years_in_hawaii; });
-    var yearsGroup = yearsDimension.group().reduceCount();
+    const yearsDimension = cf.dimension(function(d) { return d.years_in_hawaii; });
+    const yearsGroup = yearsDimension.group().reduceCount();
 
     // Create charts
-    var chartHometown = dc.pieChart("#chart-hometown");
-    var chartIndustry = dc.barChart("#chart-industry");
-    var chartYears = dc.barChart("#chart-years");
+    const chartHometown = dc.pieChart("#chart-hometown");
+    const chartIndustry = dc.barChart("#chart-industry");
+    const chartYears = dc.barChart("#chart-years");
 
     // Set chart properties
     chartHometown
         .width(300)
         .height(300)
         .dimension(dimHometown)
-        .group(groupHometown);
+        .group(groupHometown)
+        .innerRadius(50)
+        .colors(pieChartColors);
 
     chartIndustry
-        .width(600)
+        .width(900)
         .height(300)
         .dimension(dimIndustry)
         .group(groupIndustry)
         .x(d3.scaleBand())
         .xUnits(dc.units.ordinal)
-        .elasticX(true);
+        .elasticX(true)
+        .colors(barChartColors)
 
     chartYears
         .width(500)
@@ -78,6 +99,7 @@
         .ordering(function(d) { return d.key; }) // Use d3.ascending to sort by number
         .elasticY(true)
         .margins({ top: 10, right: 50, bottom: 30, left: 50 })
+        .colors(pieChartColors)
         .xAxis().tickFormat(function(d) {
           if (d === 5) {
             return '5+';
