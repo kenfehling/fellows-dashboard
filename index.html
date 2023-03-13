@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Data Visualization Dashboard</title>
+  <meta charset="UTF-8">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/d3/7.8.2/d3.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/crossfilter2/1.5.4/crossfilter.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/dc/4.2.7/dc.min.js"></script>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/dc/4.2.7/style/dc.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="row">
+  <div class="chart-wrapper pie">
+    <h2>Hometown</h2>
+    <div id="chart-hometown"></div>
+  </div>
+  <div class="chart-wrapper bar">
+    <h2>Years in Hawaii</h2>
+    <div id="chart-years"></div>
+  </div>
+  <div class="chart-wrapper bar">
+    <h2>Industry</h2>
+    <div id="chart-industry"></div>
+  </div>
+</div>
+<script>
+  d3.csv("data.csv").then(function(data) {
+
+    // Convert strings to numbers where needed
+    data.forEach(function(d) {
+      d.years_in_hawaii = +d.years_in_hawaii;
+    });
+
+    // Create a crossfilter instance
+    var cf = crossfilter(data);
+
+    // Define dimensions
+    var dimHometown = cf.dimension(function(d) { return d.hometown; });
+    var dimIndustry = cf.dimension(function(d) { return d.industry; });
+
+    // Define groups
+    var groupHometown = dimHometown.group();
+    var groupIndustry = dimIndustry.group();
+
+    // Create the "Years in Hawaii" dimension and group
+    var yearsDimension = cf.dimension(function(d) { return d.years_in_hawaii; });
+    var yearsGroup = yearsDimension.group().reduceCount();
+
+    // Create charts
+    var chartHometown = dc.pieChart("#chart-hometown");
+    var chartIndustry = dc.barChart("#chart-industry");
+    var chartYears = dc.barChart("#chart-years");
+
+    // Set chart properties
+    chartHometown
+        .width(300)
+        .height(300)
+        .dimension(dimHometown)
+        .group(groupHometown);
+
+    chartIndustry
+        .width(600)
+        .height(300)
+        .dimension(dimIndustry)
+        .group(groupIndustry)
+        .x(d3.scaleBand())
+        .xUnits(dc.units.ordinal)
+        .elasticX(true);
+
+    chartYears
+        .width(500)
+        .height(300)
+        .dimension(yearsDimension)
+        .group(yearsGroup)
+        .x(d3.scaleBand())
+        .xUnits(dc.units.ordinal)
+        .ordering(function(d) { return d.key; }) // Use d3.ascending to sort by number
+        .elasticY(true)
+        .margins({ top: 10, right: 50, bottom: 30, left: 50 })
+        .xAxis().tickFormat(function(d) {
+          if (d === 5) {
+            return '5+';
+          }
+          return d;
+        });
+
+    chartIndustry.yAxis().ticks(0);
+    chartYears.yAxis().ticks(0);
+
+    // Render charts
+    dc.renderAll();
+  });
+</script>
+</body>
+</html>

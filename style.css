@@ -1,0 +1,47 @@
+:root {
+  --color-bg: #222;
+  --color-text: #eee;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: sans-serif;
+}
+
+h2 {
+  font-size: 1.25em;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+
+}
+
+.chart-wrapper {
+  margin-bottom: 20px;
+}
+
+.chart-wrapper.pie {
+  max-width: 300px;
+}
+
+.chart-wrapper.bar {
+  max-width: 500px;
+}
+
+.chart-wrapper.pie text {
+  fill: var(--color-bg);
+}
+
+.axis text {
+  fill: var(--color-text);
+  font-size: 1.25em !important;
+}
+
+.chart-wrapper .axis path, .axis line {
+  fill: none;
+  stroke-width: 0;
+}
