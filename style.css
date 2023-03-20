@@ -23,6 +23,7 @@ h2 {
 .row {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .chart-wrapper {
