@@ -27,20 +27,18 @@
 </div>
 <script>
   const pieChartColors = d3.scaleOrdinal().range([
-    '#7fc97f',
     '#74c2f6',
+    '#7fc97f',
     '#beaed4',
     '#fdc086',
     '#ffff99',
-    '#e093c1',
+    '#f0027f',
+    '#386cb0',
+    '#bf5b17',
+    '#666666'
   ]);
   const barChartColors = d3.scaleOrdinal().range([
-    '#7fc97f',
     '#74c2f6',
-    '#beaed4',
-    '#fdc086',
-    '#ffff99',
-    '#e093c1',
   ]);
 
   d3.csv("data.csv").then(function(data) {
@@ -99,7 +97,7 @@
         .ordering(function(d) { return d.key; }) // Use d3.ascending to sort by number
         .elasticY(true)
         .margins({ top: 10, right: 50, bottom: 30, left: 50 })
-        .colors(pieChartColors)
+        .colors(barChartColors)
         .xAxis().tickFormat(function(d) {
           if (d === 5) {
             return '5+';
